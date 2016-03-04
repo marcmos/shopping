@@ -122,47 +122,57 @@ public class PendingOrdersFragment extends Fragment {
                 .setText(String.format("%d", pendingOrder.getQuantity()));
     }
 
-    private void bindExpandDetailsAction(final PendingOrder pendingOrder, CardView frameLayout) {
-        frameLayout.setOnClickListener(new View.OnClickListener() {
+    private void bindExpandDetailsAction(final PendingOrder pendingOrder, final CardView cardView) {
+        cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View innerView = view.findViewById(R.id
-                        .pending_order_details_inflated_viewstub);
-                if (innerView == null) {
-                    ((ViewStub) view.findViewById(R.id.pending_order_details_viewstub))
-                            .inflate();
-                    ((TextView) view.findViewById(R.id.pending_order_details_price_textview))
-                            .setText(String.format("%.2f PLN", pendingOrder.getPrice()));
-                    ((TextView) view.findViewById(R.id.pending_order_details_description_textview))
-                            .setText(pendingOrder.getDescription());
-                    ((TextView) view.findViewById(R.id.pending_order_details_date_textview))
-                            .setText(pendingOrder.getCreationDate().toString());
+                if(selectedOrders.isEmpty()) {
+                    View innerView = view.findViewById(R.id
+                            .pending_order_details_inflated_viewstub);
+                    if (innerView == null) {
+                        ((ViewStub) view.findViewById(R.id.pending_order_details_viewstub))
+                                .inflate();
+                        ((TextView) view.findViewById(R.id.pending_order_details_price_textview))
+                                .setText(String.format("%.2f PLN", pendingOrder.getPrice()));
+                        ((TextView) view
+                                .findViewById(R.id.pending_order_details_description_textview))
+                                .setText(pendingOrder.getDescription());
+                        ((TextView) view.findViewById(R.id.pending_order_details_date_textview))
+                                .setText(pendingOrder.getCreationDate().toString());
+                    } else {
+                        innerView.setVisibility(innerView.getVisibility() == View.GONE
+                                ? View.VISIBLE : View.GONE);
+                    }
                 } else {
-                    innerView.setVisibility(innerView.getVisibility() == View.GONE
-                            ? View.VISIBLE : View.GONE);
+                    toggleOrderSelection(pendingOrder, cardView);
                 }
             }
         });
     }
 
-    private void bindSelectAction(final PendingOrder pendingOrder, final CardView frameLayout) {
-        frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
+    private void bindSelectAction(final PendingOrder pendingOrder, final CardView cardView) {
+        cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                View innerView = view.findViewById(R.id.pending_order_inner_framelayout);
-                if (selectedOrders.contains(pendingOrder)) {
-                    setPriorityColor(pendingOrder, frameLayout);
-                    innerView.setBackgroundColor(Color.WHITE); // FIXME: get color from style
-                    selectedOrders.remove(pendingOrder);
-                } else {
-                    frameLayout.setCardBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-                    innerView.setBackgroundColor(Color.parseColor("#e3f2fd"));
-                    selectedOrders.add(pendingOrder);
-                }
-                actionListener.orderSelected(pendingOrder);
+                toggleOrderSelection(pendingOrder, cardView);
                 return true;
             }
         });
+    }
+
+    private void toggleOrderSelection(PendingOrder pendingOrder, CardView cardView) {
+        View innerView = cardView.findViewById(R.id.pending_order_inner_framelayout);
+        if (selectedOrders.contains(pendingOrder)) {
+            setPriorityColor(pendingOrder, cardView);
+            innerView.setBackgroundColor(Color.WHITE); // FIXME: get color from style
+            selectedOrders.remove(pendingOrder);
+        } else {
+            cardView.setCardBackgroundColor(
+                    getResources().getColor(R.color.colorPrimaryDark));
+            innerView.setBackgroundColor(Color.parseColor("#e3f2fd"));
+            selectedOrders.add(pendingOrder);
+        }
+        actionListener.orderSelected(pendingOrder);
     }
 
     public HashSet<PendingOrder> getSelectedOrders() {
