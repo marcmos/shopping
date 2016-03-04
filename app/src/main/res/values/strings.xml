@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Shopping</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="pending_order_details_description">Description</string>
+    <string name="pending_order_details_maximum_price">Maximum price</string>
+    <string name="pending_order_details_maximum_price_value">%.2f PLN</string>
+    <string name="pending_order_details_creation_date">Creation date</string>
+    <string name="title_activity_add_pending_order">Add pending order</string>
+</resources>

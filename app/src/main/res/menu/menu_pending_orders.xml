@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      tools:context=".PendingOrdersActivity">
+
+    <item
+        android:id="@+id/action_remove"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:title="Remove items"
+        app:showAsAction="always" />
+</menu>
